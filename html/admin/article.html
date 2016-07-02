@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>文章</title>
+<!-- 引入bootstrap css -->
+<link href="../plug/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="../plug/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+<!-- 引入sweetAlert css -->
+<link href="../plug/sweetalert/css/sweet-alert.css" rel="stylesheet">
+<!-- 引入扩展特效 css -->
+<link href="../css/base.css" rel="stylesheet">	
+<!-- 引入百度编辑器 css -->
+<link href="../plug/ueditor/themes/default/ueditor.css"/>
+
+</head>
+<body>
+<div class="container">
+	<div i="top"></div>
+</div>
+
+<div style="width:800px;margin:20px auto 40px; background-color:pink">  
+	<script type="text/plain" id="editor" style="width:100%;height:500px;"></script>  
+</div> 
+
+<!-- 引入jq -->
+<script src="../js/jquery-2.0.min.js"></script>
+<!-- 引入全局定义 js -->
+<script src="../js/base.js"></script>	
+<!-- 引入扩展特效 js -->
+<script src="../js/main.js"></script>	
+<!-- 引入bootstrap js -->
+<script src="../plug/bootstrap/js/bootstrap.min.js"></script>
+<!-- 引入sweetAlert js -->
+<script src="../plug/sweetalert/js/sweet-alert.min.js"></script>
+<!-- 引入当前文件 js -->
+<script src="../js/admin/article.js"></script>
+<!-- 引入百度编辑器 js -->
+<script src="../plug/ueditor/ueditor.config.js"></script>
+<script src="../plug/ueditor/ueditor.all.js"></script>
+<script> 
+	var editor = new baidu.editor.ui.Editor();  
+    editor.render('editor');
+</script>
+
+</body>
+</html>

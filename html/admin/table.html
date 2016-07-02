@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>动态表单测试</title>
+<!-- 引入bootstrap css -->
+<link href="../plug/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="../plug/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+<!-- 引入bootstrap-table css -->
+<link href="../plug/bootstrap/css/bootstrap-table.min.css" rel="stylesheet">
+<!-- 引入sweetAlert css -->
+<link href="../plug/sweetalert/css/sweet-alert.css" rel="stylesheet">
+<!-- 引入扩展特效 css -->
+<link href="../css/base.css" rel="stylesheet">	
+</head>
+<body>
+<div class="container">
+	<div i="top">
+
+	</div>
+    <table>
+     	<tr>
+     		<td>管理员名称</td>
+     		<td><input type="text" i='admin_name'/></td>
+     	</tr>
+     	<tr>
+     		<td><button i='seach_list'>搜索</button></td>
+     	</tr>
+    </table>
+    <br>
+	<table i="tableList"  class="table table-bordered table-hover" data-pagination="true" data-page-list="[10, 25, 50, 100]" data-side-pagination="server"></table>
+</div>
+
+<!-- 引入jq -->
+<script src="../js/jquery-2.0.min.js"></script>
+<!-- 引入全局定义 js -->
+<script src="../js/base.js"></script>	
+<!-- 引入扩展特效 js -->
+<script src="../js/main.js"></script>	
+<!-- 引入bootstrap js -->
+<script src="../plug/bootstrap/js/bootstrap.min.js"></script>
+<!-- 引入bootstrap-table js -->
+<script src="../plug/bootstrap/js/bootstrap-table.min.js"></script>
+<script src="../plug/bootstrap/js/bootstrap-table-zh-CN.min.js"></script>
+<!-- 引入sweetAlert js -->
+<script src="../plug/sweetalert/js/sweet-alert.js"></script>
+<!-- 引入当前文件 js -->
+<script src="../js/admin/table.js"></script>
+</body>
+</html>

@@ -4,8 +4,6 @@ class Login extends MY_Controller{
 
 	public function __construct(){
 		parent::__construct();
-		//session验证
-		//$this->_auth('session',__CLASS__,TRUE);
 	}
 
 	/**
@@ -42,12 +40,12 @@ class Login extends MY_Controller{
 	 */
 	public function get_check_login(){
 		if(isset($_SESSION['admin_id'])&&!empty($_SESSION['admin_id'])){
-			$data['is_login'] = true;
+			$data['is_login']=true;
  		}else{
- 			$data['is_login'] = false;
+ 			$data['is_login']=false;
  		}
-		$this->r['data'] = $data;
-		$this->state = true;
+		$this->r['data']=$data;
+		$this->state=true;
 		$this->r();
 	}
 
@@ -56,7 +54,7 @@ class Login extends MY_Controller{
 	 */
 	public function delete_index(){
 		unset($_SESSION['admin_id']);
-		$this->state = true;
+		$this->state=true;
 		$this->r();
 	}
 	

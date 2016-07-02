@@ -1,7 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Manage_goods_model extends MY_Model{
-	
+class Get_address_model extends MY_Model{
 	public $model_db;
 	public $table;
 	
@@ -12,7 +11,8 @@ class Manage_goods_model extends MY_Model{
 
 	private function __db_init(){
 		$this->model_db=$this->db;
-		$this->table=$this->model_db->dbprefix('goods');
+		$this->table=$this->model_db->dbprefix('address');
 	}
+
 
 ?>

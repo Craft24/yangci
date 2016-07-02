@@ -1,8 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-/**
- * 商品数据操作
- */
-class Get_admin_model extends MY_Model{
+
+class Get_category_model extends MY_Model{
 	public $model_db;
 	public $table;
 	
@@ -11,7 +9,10 @@ class Get_admin_model extends MY_Model{
 		$this->__db_init();
 	}
 
-
+	private function __db_init(){
+		$this->model_db=$this->db;
+		$this->table=$this->model_db->dbprefix('category');
+	}
 
 
 ?>

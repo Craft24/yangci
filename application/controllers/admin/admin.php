@@ -52,7 +52,7 @@ class Admin extends MY_Controller
         $admin_id=$data['id'];
         $updata=array(
             'is_on'=>0,
-            'update_time'=>$this->time
+            'update_time'=>$this->time()
         );
         $this->manage_admin_model->delete($admin_id,$updata);//删除管理员表
         $this->state=true;

@@ -11,7 +11,7 @@ class Brand extends MY_Controller{
      * @author jieyang
      */
     public function post_index(){
-        $this->load->modle('admin/Manage_brand_model','manage_brand_model');
+        $this->load->model('admin/Manage_brand_model','manage_brand_model');
         $data=$this->input->post();
         $rule=array(
             'brand_name'=>array(null,null,true),
@@ -21,7 +21,11 @@ class Brand extends MY_Controller{
             'sort'=>array('egNum',null,true)
         );
         $this->verify->verify($rule,$data);
-        $this->manage_brand_model->add($data);
+        foreach($rule as $k=>$v){
+            isset($data[$k])?$save[$k]=$data[$k]:'';
+        }
+        $save['add_time']=time();
+        $this->manage_brand_model->add($save);
         $this->state=true;
         $this->r();
     }

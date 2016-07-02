@@ -3,15 +3,14 @@ header('Access-Control-Allow-Origin:loc.testerp.com');
 
 class Admin extends MY_Controller
 {
-    public function __construct()
-    {
+    public function __construct(){
         parent::__construct();
     }
 
     /**
      * 获取一条数据
      */
-    function get_admin_one(){
+    public function get_admin_one(){
         $this->load->model('common/admin/Get_admin_model','get_admin');
         $data=$this->input->get();
         $rule=array(
@@ -28,7 +27,7 @@ class Admin extends MY_Controller
     /**
      * 获取数据列表
      */
-    function get_admin_list(){
+    public function get_admin_list(){
         $this->load->library('page');
         $this->load->model('common/admin/Get_admin_model','get_admin');
         $data=$this->input->get();
@@ -42,7 +41,7 @@ class Admin extends MY_Controller
         $this->r();
     }
     
-    function delete_index(){
+    public function delete_index(){
         $this->load->model('admin/Manage_admin_model','manage_admin_model');
         $data=$this->input->post();
         $rule=array(
@@ -54,7 +53,7 @@ class Admin extends MY_Controller
             'is_on'=>0,
             'update_time'=>$this->time()
         );
-        $this->manage_admin_model->delete($admin_id,$updata);//删除管理员表
+        $this->manage_admin_model->delete($admin_id,$updata);
         $this->state=true;
         $this->r();
     }

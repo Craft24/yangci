@@ -98,7 +98,6 @@ class MY_Controller extends CI_Controller
 		}
 	}*/
 
-	
 
 	/**
 	 * 用于获取单页列表数据

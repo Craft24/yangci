@@ -62,7 +62,7 @@ class CI_Cache_memcached extends CI_Driver {
 	 */
 	protected $_memcache_conf = array(
 		'default' => array(
-			'host'		=> '127.0.0.1',
+			'host'		=>'127.0.0.1',
 			'port'		=> 11211,
 			'weight'	=> 1
 		)
@@ -225,6 +225,7 @@ class CI_Cache_memcached extends CI_Driver {
 				{
 					$this->_memcache_conf[$name] = $conf;
 				}
+				//var_dump($this->_memcache_conf);
 			}
 		}
 
@@ -267,7 +268,6 @@ class CI_Cache_memcached extends CI_Driver {
 				);
 			}
 		}
-
 		return TRUE;
 	}
 

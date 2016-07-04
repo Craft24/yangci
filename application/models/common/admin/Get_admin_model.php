@@ -3,9 +3,11 @@
 class Get_admin_model extends MY_Model{
 	public $model_db;
 	public $table;
+	public $cached;
 	
 	public function __construct(){
 		parent::__construct();
+		$this->cache_db->init(__CLASS__,__FILE__);
 		$this->__db_init();
 	}
 
@@ -14,6 +16,23 @@ class Get_admin_model extends MY_Model{
 		$this->table=$this->model_db->dbprefix('admin');	
 	}
 	
+	public function testMc(){  
+	    $this->load->driver('cache');  
+	    //实例化memcached缓存
+	    $this->cache->memcached->is_supported();
+	    $key='dd';
+	    $data=time();
+	    //保存数据
+	    $is_success=$this->cache->memcached->save($key,serialize($data),60);
+	    //获取数据
+	    $str=$this->cache->memcached->get($key);
+	    //print_r("dd=".unserialize($str));
+	    //删除数据
+	    //$this->cache->memcached->delete($key);
+	    //print_r($this->cache->memcached->get($key));
+	    return $str;
+    }
+    
 	public function getList($begin=0,$page_size=10,$data){
 	    $param=array();
 	    $is_where='';

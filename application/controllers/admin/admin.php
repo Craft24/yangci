@@ -7,11 +7,28 @@ class Admin extends MY_Controller
         parent::__construct();
     }
 
+   /*  public function get_one(){
+        $this->load->model('common/admin/Get_admin_model','get_admin');
+        $info=$this->get_admin->testMc();
+        $this->r['data']=$info;
+        $this->state=true;
+        $this->r();
+    } */
+   
+    public function post_index(){
+        $this->load->model('admin/Manage_admin_model','manage_admin_model');
+        $data=$this->input->post();
+        $rule=array(
+            ''
+        );
+    }
+    
     /**
      * 获取一条数据
+     * @author jieyang
      */
     public function get_admin_one(){
-        $this->load->model('common/admin/Get_admin_model','get_admin');
+        $this->load->model('common/admin/Get_admin_model','get_admin_model');
         $data=$this->input->get();
         $rule=array(
             'id'=>array('egNum',null,true)
@@ -26,6 +43,7 @@ class Admin extends MY_Controller
     
     /**
      * 获取数据列表
+     * @author jieyang
      */
     public function get_admin_list(){
         $this->load->library('page');
@@ -41,6 +59,10 @@ class Admin extends MY_Controller
         $this->r();
     }
     
+    /**
+     * 删除管理员
+     * @author jieyang
+     */
     public function delete_index(){
         $this->load->model('admin/Manage_admin_model','manage_admin_model');
         $data=$this->input->post();

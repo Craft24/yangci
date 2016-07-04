@@ -14,5 +14,5 @@ class Get_article_model extends MY_Model{
 		$this->table=$this->model_db->dbprefix('article');
 	}
 
-
+}
 ?>

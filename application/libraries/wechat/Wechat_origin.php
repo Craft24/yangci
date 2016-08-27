@@ -1,6 +1,4 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-
 /**
  *	微信公众平台PHP-SDK, 官方API部分
  *  @author  dodge <dodgepudding@gmail.com>
@@ -218,7 +216,7 @@ class Wechat_origin
 	private $encrypt_type;
 	private $appid;
 	private $appsecret;
-	private $access_token;
+	public  $access_token;
 	private $jsapi_ticket;
 	private $api_ticket;
 	private $user_token;
@@ -260,7 +258,7 @@ class Wechat_origin
 		sort($tmpArr, SORT_STRING);
 		$tmpStr = implode( $tmpArr );
 		$tmpStr = sha1( $tmpStr );
-		$this->errorLog($tmpStr.'----'.$signature);
+
 		if( $tmpStr == $signature ){
 			return true;
 		}else{
@@ -1092,7 +1090,7 @@ class Wechat_origin
 	 * GET 请求
 	 * @param string $url
 	 */
-	private function http_get($url){
+	public function http_get($url){
 		$oCurl = curl_init();
 		if(stripos($url,"https://")!==FALSE){
 			curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
@@ -1118,7 +1116,7 @@ class Wechat_origin
 	 * @param boolean $post_file 是否文件上传
 	 * @return string content
 	 */
-	private function http_post($url,$param,$post_file=false){
+	public function http_post($url,$param,$post_file=false){
 		$oCurl = curl_init();
 		if(stripos($url,"https://")!==FALSE){
 			curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
@@ -1862,6 +1860,7 @@ class Wechat_origin
 	public function uploadArticles($data){
 		if (!$this->access_token && !$this->checkAuth()) return false;
 		$result = $this->http_post(self::API_URL_PREFIX.self::MEDIA_UPLOADNEWS_URL.'access_token='.$this->access_token,self::json_encode($data));
+		$this->log(self::json_encode($data));
 		if ($result)
 		{
 			$json = json_decode($result,true);
@@ -2856,7 +2855,7 @@ class Wechat_origin
 	 *   "errmsg": "ok",
 	 * }
 	 */
-	public function addKFAccount($account,$nickname,$password){
+	/*public function addKFAccount($account,$nickname,$password){
 	    $data=array(
 	    	"kf_account" =>$account,
 	        "nickname" => $nickname,
@@ -2875,7 +2874,7 @@ class Wechat_origin
 			return $json;
 		}
 		return false;
-	}
+	}*/
 
 	/**
 	 * 修改客服账号信息
@@ -3840,7 +3839,7 @@ class Wechat_origin
      */
     public function uploadShakeAroundMedia($data){
         if (!$this->access_token && !$this->checkAuth()) return false;
-        $result = $this->http_post(self::API_URL_PREFIX.self::SHAKEAROUND_MATERIAL_ADD.'access_token='.$this->access_token,$data,true);
+        $result = $this->http_post(self::API_BASE_URL_PREFIX.self::SHAKEAROUND_MATERIAL_ADD.'access_token='.$this->access_token,$data,true);
         if ($result)
         {
             $json = json_decode($result,true);
@@ -4046,11 +4045,12 @@ class Wechat_origin
      * @author polo<gao.bo168@gmail.com>
      * @version 2015-3-25 下午3:23:00
      * @copyright Show More
+     * @edit 凌翔
      */
-    public function deleteShakeAroundPage($page_ids=array()){
+    public function deleteShakeAroundPage($page_id){
         if (!$this->access_token && !$this->checkAuth()) return false;
         $data = array(
-            'page_ids' => $page_ids
+            'page_id' => (int)$page_id
         );
         $result = $this->http_post(self::API_BASE_URL_PREFIX . self::SHAKEAROUND_PAGE_DELETE . 'access_token=' . $this->access_token, self::json_encode($data));
         $this->log($result);

@@ -3,6 +3,21 @@ class Verify {
 	public function __construct($params = array())
 	{
 	}
+
+	public function get_data(){
+		if(!empty($this->rule) /*&& !empty($this->data)*/){
+			$data=array();
+			foreach($this->rule as $key => $v){
+				if(isset($this->data[$key])){
+					$data[$key]=$this->data[$key];
+				}
+			}
+			return $data;
+		}
+
+		throw new LibrariesErrorException('没有数据','NO_DATA');
+	}
+	
 	
 	/**
 	 * 验证
@@ -11,61 +26,84 @@ class Verify {
 	 * @param array $data
 	 */
 	public function verify($rule,$data=null){
+		//默认post数据
 		if($data===null){
 			$data=$_POST;
 		}
+
 		$r_data = array();
-		foreach ($rule as $key=>$a){
-			if (is_string($key)&&!isset($data[$key])){
-				if (!isset($a[2]) || $a[2]===true){
+		//var_dump($rule);
+		//var_dump($data);
+		foreach ($rule as $key=>$v){
+			//----分析参数
+
+			//定义参数的值
+			$value=isset($data[$key])?$data[$key]:'';
+
+			//默认结果为false
+			$rt=false;
+
+			//额外参数
+			$extra = isset($v[1]) ? $v[1] : null;
+
+			//该参数是否必须传入
+			$is_required= ( !isset($v[2]) || $v[2]===true ) ? true : false ;
+
+			//验证传入
+			if(!is_string($key)){
+				throw new LibrariesErrorException('验证规则格式错误！', 'format-error');
+			}
+
+
+			if (!isset($data[$key])){
+				if($is_required){ 	//设置了必须传入的,验证是否传入
 					throw new LibrariesErrorException($key.'验证字段不存在！', $key.'-error');
-					//$this->$verError=$key.'验证字段不存在！';
-					//return false;
-				}elseif ($a[2]===false){
+				}
+				else{		//设置了必须传入的,验证是否传入,如果传入则验证
+					if(array_key_exists($key,$data)){
+						throw new LibrariesErrorException($key.'验证字段不能为空！', $key.'-error');
+					}
 					continue;
 				}
-			}elseif (is_numeric($key)){
-				$rt=$this->verify($a, $data);
-				if ($rt==false){
-					return false;
-				}
+			}
+
+			//验证类型
+			if(!isset($v[0])){
+				$ver_type='notNull';   //默认为非空
+			}
+			else{
+				$ver_type=$v[0];
+			}
+
+			//该参数是否允许传空值,仅允许传字符串的'',不能传null
+			$can_null= ( isset($v[3]) && $v[3] === true ) ? true : false ;
+			if( $can_null && $data[$key] === '' ){
 				continue;
 			}
-	
-	
-				
-			$value=isset($data[$key])?$data[$key]:'';
-	
-			$type=isset($a[0])?$a[0]:'';
-			$rt=false;
-			switch ($type){
-				case 'email' :
+
+			//如果非空类型,又设置了可传空值,报错
+			if( $can_null && $ver_type === 'notNull' ){
+				throw new LibrariesErrorException('不能同时设置非空验证类型和可传空值的选项！', 'format-error');
+			}
+
+			switch ($ver_type){
+				case 'canNull' :   //可为空而不验证类型
+					$rt=true;
+					break;
+				case 'notNull' :   //不能为空
+					$rt=$this->notNull($value);
+					break;
+				case 'email' :		//验证邮箱
 					$rt=$this->isEmail($value);
 					break;
-				case 'mobile' :
+				case 'mobile' :		//验证手机
 					$rt=$this->isMobile($value);
 					break;
-				case 'num' :   //大于等于0的正数
-					$rt=(is_numeric($value)&&$value >=0)?true:false;
+				case 'num' :   //判断是否为数字
+					$rt=$this->isNum($value,$extra);
 					break;
-				case 'egNum' : 	//大于0的正整数数字
-					if(!preg_match('/^\+?[1-9]\d*$/',$value)){
-						$rt=false;
-						break;
-					}
-
-					if (isset($a[1])&&$a[1]!==null){
-						if (!(intval($value) > 0  && intval($value) < $a[1])){
-							$rt=false;
-						}
-						else{
-							$rt=true;
-						}
-					}
-					else{
-						$rt=true;
-					}
-	
+				case 'egNum' : 	//正整数数字(大于0的整数)
+					$rt=$this->isEgNum($value,$extra);
 					break;
 				case 'zcode':
 					$rt=$this->isZcode($value);
@@ -86,31 +124,66 @@ class Verify {
 					$rt=$this->isIDcard($value);
 					break;
 				case 'in' :
-					$rt=$this->in($value, $a[1]);
+					$rt=$this->in($value, $extra);
 					break;
 				case 'reg' :
-					$rt=$this->reg($value, $a[1]);
-					break;
-				case 'extra' :
-					$rt=$this->multiToOne($a, $data);
+					$rt=$this->reg($value, $extra);
 					break;
 				default:
-					if (!empty($value)){
-						$rt=true;
-					}
+					$rt=$this->notNull($value);
 					break;
 			}
 	
 			if ($rt==false){
 				throw new LibrariesErrorException($key.'字段验证错误！', $key.'-error');
-				//$this->$verError=$key.'字段验证错误！';
-				//return false;
 			}
 
 			$r_data[$key]=$value;
 		}
 		 
 		return $r_data;
+	}
+
+	/**
+	 * 验证是否可为空
+	 * @author: 亮 <chenjialiang@han-zi.cn>
+	 */
+	public function notNull($value){
+		if ( !empty($value) || $value === 0 || $value === "0" ){
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 是否正整数
+	 * @author: 亮 <chenjialiang@han-zi.cn>
+	 */
+	public function isEgNum($value,$max_value=null){
+		if(!preg_match('/^\+?[1-9]\d*$/',$value)){
+			return false;
+		}
+
+		//判断范围
+		if ($max_value!==null){
+			if (!(intval($value) < $max_value)){
+				return false;
+			}
+
+		}
+		return true;
+	}
+
+	/**
+	 * 是否数字
+	 * @author: 亮 <chenjialiang@han-zi.cn>
+	 */
+	public function isNum($value,$extra=null){
+		if (!is_numeric($value)) {
+			return false;
+		}
+
+		return true;
 	}
 	
 	/**

@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+#访问的域名是loc.yangci.com
+RewriteCond %{HTTP_HOST} ^loc\.yangci\.com$  
+#域名后的地址不是 /html/开头
+RewriteCond %{REQUEST_URI} !^/html/  
+#访问文件不存在
+RewriteCond %{REQUEST_FILENAME} !-f 
+#访问目录不存在
+RewriteCond %{REQUEST_FILENAME} !-d 
+#^(.*)$,将会匹配当前请求的url,域名后的地址
+RewriteRule ^(.*)$ /html/$1  
+</IfModule>

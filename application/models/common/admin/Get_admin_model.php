@@ -3,7 +3,7 @@
 class Get_admin_model extends MY_Model{
 	public $model_db;
 	public $table;
-	public $cached;
+	//public $cached;
 	
 	public function __construct(){
 		parent::__construct();
@@ -103,5 +103,22 @@ class Get_admin_model extends MY_Model{
 			throw new ModelErrorException('获取数据失败','GET_ADMIN_INFO_FAIL');
 		}
 		return $info;
+	}
+
+	/*
+	* 导出列表
+	*/
+	public function getListExcel(){
+ 		$sql='
+        SELECT
+            admin_name
+            true_name,
+            mobile_phone,
+	        add_time
+        FROM '.$this->table.'
+        WHERE 
+            is_on = 1';
+	    $list=$this->model_db->query($sql)->result_array();
+	    return $list;
 	}
 }

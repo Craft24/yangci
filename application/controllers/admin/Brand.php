@@ -93,7 +93,7 @@ class Brand extends MY_Controller{
             'brand_logo'=>array(null,null,false),
             'brand_code'=>array(null,null,false),
             'remarks'=>array(null,null,false),
-            'sort'=>array('egNum',null,false)
+            'sort'=>array('num',null,false)
         );
         $this->verify->verify($rule,$data);
         foreach($rule as $k=>$v){

@@ -80,4 +80,28 @@ class Admin extends MY_Controller
         $this->r();
     }
 
+    /**
+     * 导出列表
+     */
+    public function get_admin_export(){  
+        $this->load->model('common/admin/Get_admin_model','get_admin_model');  
+        //文件名
+        $tile_name='管理员列表';
+        //表身数据
+        $list= $this->get_admin_model->getListExcel();
+        $this->load->library('Excel',true,'exp');
+        //表头数据
+        $table_arr=array();
+        $table_arr[0]='真实名称';
+        $table_arr[1]='手机号'; 
+        $table_arr[2]='添加时间'; 
+        //调用导出的方法
+        //table_arr 表头的数组 list 表身的数组 tile_name 导出的excel名 
+        $url = $this->exp->get_export($table_arr,$list,$tile_name);
+        $this->r['data']['url'] = $url;
+        $this->state = true;
+        $this->r();
+         
+    }
+
 }

@@ -97,6 +97,27 @@ class MY_Controller extends CI_Controller
 			
 		}
 	}*/
+	
+	
+	
+	/**
+	 * 重定义路由请求规则
+	 * @author jieyang
+	 * _remap ci系统提供的重映射方法
+	 */
+	public function _remap($model = 'index', $params = array()){
+	    $method = $this->input->method();
+	    $method = empty($method) ? 'get' : strtolower($method);
+	    $restful_model = $method . '_' . $model;
+	    if (method_exists($this, $restful_model)) {
+	        call_user_func_array(array(&$this, $restful_model), $params);
+	    } elseif (method_exists($this, $model)) {
+	        call_user_func_array(array(&$this, $model), $params);
+	    } else {
+	        ApiRESTful::echo_404();
+	    }
+	    unset($method, $restful_model, $params);
+	}
 
 
 	/**
